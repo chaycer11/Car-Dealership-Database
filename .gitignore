@@ -1,0 +1,14 @@
+# Ignore the database password file (CRITICAL!)
+.env
+
+# Ignore Python virtual environments (they are too massive to upload)
+venv/
+.venv/
+env/
+
+# Ignore Python compiled junk files
+__pycache__/
+*.pyc
+
+# Ignore Mac system files (if anyone is using a Mac)
+.DS_Store

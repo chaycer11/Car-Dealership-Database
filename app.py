@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import mysql.connector
 import os
 from dotenv import load_dotenv
@@ -16,12 +16,18 @@ def get_db_connection():
     return connection
 
 
+
+
 @app.route('/')
-def home():
+def database():
     try:
         conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute('SELECT * FROM Vehicle')
+        Vehicle = cursor.fetchall()
+        cursor.close()
         conn.close()
-        return "<h1> DMS is Online </h1>"
+        return render_template('index.html', cars=Vehicle)
     except Exception as e:
         return f"<h1> System online but failed to connect to database </h1> <p> Error: {e} </p>"
 

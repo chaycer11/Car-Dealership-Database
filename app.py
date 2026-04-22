@@ -1,11 +1,20 @@
 from flask import Flask, render_template
 import db
 from dotenv import load_dotenv
+from auth import auth_bp
 
 app = Flask(__name__)
 
+app.config['SECRET_KEY'] = 'd757a259ea5d51bd40f2eaff47aad6ae'
 
-@app.route('/')
+app.register_blueprint(auth_bp)
+
+@app.route('/home')
+def home():
+    return render_template('base.html')
+
+
+@app.route('/vehicles')
 def database():
     vehicles = db.get_all_vehicles()
     try:

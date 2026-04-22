@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect
 import db
 from dotenv import load_dotenv
 from auth import auth_bp
@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'd757a259ea5d51bd40f2eaff47aad6ae'
 
 app.register_blueprint(auth_bp)
+
+@app.route('/')
+def index():
+    return redirect(url_for('auth.register'))
 
 @app.route('/home')
 def home():

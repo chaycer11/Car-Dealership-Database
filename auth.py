@@ -22,4 +22,10 @@ def register():
 @auth_bp.route('/logout')
 def logout():
     # Logic to clear the user's session
-    return redirect(url_for('index'))
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        flash(f'Logged in as {form.username.data}!', 'success')
+        return redirect(url_for('database'))
+
+    return render_template('login.html', form=form)

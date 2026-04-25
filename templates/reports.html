@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold">📊 Dealership Operational Report</h2>
+            <p class="text-muted">Live Database Metrics</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow border-0 bg-success text-white h-100">
+                <div class="card-body text-center py-4">
+                    <h1 class="display-4 fw-bold">{{ stats.sold_count }}</h1>
+                    <h5 class="card-title mt-2">Total Vehicles Sold</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow border-0 bg-warning text-dark h-100">
+                <div class="card-body text-center py-4">
+                    <h1 class="display-4 fw-bold">{{ stats.service_count }}</h1>
+                    <h5 class="card-title mt-2">Cars in Service Bay</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow border-0 bg-primary text-white h-100">
+                <div class="card-body text-center py-4">
+                    <h1 class="display-4 fw-bold">{{ stats.inventory_count }}</h1>
+                    <h5 class="card-title mt-2">Available Inventory</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card shadow border-0 bg-dark text-white h-100">
+                <div class="card-body text-center py-4">
+                    <h2 class="display-6 fw-bold mt-2">${{ "{:,.2f}".format(stats.inventory_value) }}</h2>
+                    <h5 class="card-title mt-3">Total Asset Value</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <button onclick="window.print()" class="btn btn-outline-secondary btn-lg">
+                🖨️ Print Report
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

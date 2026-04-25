@@ -4,6 +4,43 @@
     <div class="container mt-5">
         <h1 class="mb-4">Live Vehicle Inventory</h1>
         
+        <div class="card shadow-sm border-0 mb-4 bg-light">
+            <div class="card-body">
+                <form method="GET" action="{{ url_for('database') }}" class="row g-3 align-items-end">
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-secondary small">Make</label>
+                        <input type="text" name="make" class="form-control" placeholder="e.g. Toyota" value="{{ request.args.get('make', '') }}">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold text-secondary small">Model</label>
+                        <input type="text" name="model" class="form-control" placeholder="e.g. Camry" value="{{ request.args.get('model', '') }}">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold text-secondary small">Year</label>
+                        <input type="number" name="year" class="form-control" placeholder="e.g. 2020" value="{{ request.args.get('year', '') }}">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold text-secondary small">Max Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" name="max_price" class="form-control" placeholder="e.g. 25000" step="0.01" value="{{ request.args.get('max_price', '') }}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2 d-grid gap-2">
+                        <button type="submit" class="btn btn-primary fw-bold">Search</button>
+                    </div>
+                    <div class="col-12 text-end mt-2">
+                        <a href="{{ url_for('database') }}" class="text-decoration-none text-muted small">Clear Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
         <div class="card shadow-sm">
             <div class="card-body">
                 <table class="table table-hover align-middle">
@@ -14,7 +51,7 @@
                             <th>Make</th>
                             <th>Model</th>
                             <th>Price</th>
-                            <th>Status</th>
+                            <th>Location</th><th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,7 +60,13 @@
                             <td>{{ car.vin }}</td>
                             <td>{{ car.year }}</td>
                             <td>{{ car.make }}</td>
-                            <td>{{ car.MODEL }}</td> <td>${{ car.price }}</td>
+                            <td>{{ car.model }}</td> 
+                            <td>${{ car.price }}</td>
+                            
+                            <td class="fw-bold text-secondary">
+                                {{ car.location.replace('_', ' ').title() if car.location else 'Main Lot' }}
+                            </td>
+                            
                             <td>
                                 {% if car.status == 'available' %}
                                     <span class="badge bg-success">Available</span>

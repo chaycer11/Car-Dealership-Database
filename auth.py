@@ -1,31 +1,46 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from forms import RegistrationForm, LoginForm
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask_login import login_user, logout_user, login_required
+from forms import LoginForm, RegistrationForm # Use your existing forms
+import db
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    # Later, we will add the Flask-WTF form logic here!
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = db.authenticate_user(form.email.data, form.password.data, form.user_type.data)
+        if user:
+            login_user(user)
+            flash(f'Welcome back, {user.name}!', 'success')
+            return redirect(url_for('home'))
+        flash('Invalid Name or Password.', 'danger')
+    return render_template('login.html', form=form)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-    # Later, we will add the database insertion logic here!
     form = RegistrationForm()
-
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success') 
-        return redirect(url_for('database'))
-  
+        # 1. Check if email already exists (Optional but good practice)
+        # 2. Call our database function to save the user
+        success = db.create_customer(
+            name=form.name.data,
+            phone=form.phone.data,
+            email=form.email.data,
+            address=form.address.data,
+            password=form.password.data # db.py handles the hashing!
+        )
+        
+        if success:
+            flash('Your account has been created! You can now log in.', 'success')
+            return redirect(url_for('auth.login'))
+        else:
+            flash('Something went wrong. Email might already be in use.', 'danger')
+            
     return render_template('register.html', form=form)
 
 @auth_bp.route('/logout')
+@login_required
 def logout():
-    # Logic to clear the user's session
-    form = LoginForm()
-
-    if form.validate_on_submit():
-        flash(f'Logged in as {form.username.data}!', 'success')
-        return redirect(url_for('database'))
-
-    return render_template('login.html', form=form)
+    logout_user()
+    return redirect(url_for('home'))

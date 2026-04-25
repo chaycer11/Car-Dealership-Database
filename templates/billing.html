@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">Process Payment</h4>
+                </div>
+                <div class="card-body p-4 bg-light">
+                    
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.ticket_type.label(class="form-control-label fw-bold") }}
+                                {{ form.ticket_type(class="form-select") }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.ticket_id.label(class="form-control-label fw-bold") }}
+                                {{ form.ticket_id(class="form-control", placeholder="e.g. 1") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                {{ form.amount.label(class="form-control-label fw-bold") }}
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    {{ form.amount(class="form-control", type="number", step="0.01") }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                {{ form.payment_method.label(class="form-control-label fw-bold") }}
+                                {{ form.payment_method(class="form-select") }}
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-2">
+                            {{ form.submit(class="btn btn-primary btn-lg fw-bold") }}
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

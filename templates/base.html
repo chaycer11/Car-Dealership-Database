@@ -7,50 +7,95 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">WKU Auto Group</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown link
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('database') }}">Inventory</a>
+                    </li>
                 </ul>
-                </li>
-            </ul>
+
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.user_type == 'employee' %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-warning" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Staff Tools
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    
+                                    
+                                    {% if current_user.role == 'salesperson' %}
+                                        <li><a class="dropdown-item" href="{{ url_for('sell_vehicle') }}">Process Sale</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('add_customer') }}">Register Walk-in</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('add_vehicle') }}">Add New Vehicle</a></li>
+                                    {% endif %}
+
+                                    {% if current_user.role == 'mechanic' %}
+                                        <li><a class="dropdown-item" href="{{ url_for('service_vehicle') }}">Service Bay</a></li>
+                                    {% endif %}
+
+                                    {% if current_user.role == 'billing' or current_user.role == 'salesperson' %}
+                                        <li><a class="dropdown-item text-info fw-bold" href="{{ url_for('customer_lookup') }}">Customer Directory</a></li>
+                                        <li><a class="dropdown-item text-success fw-bold" href="{{ url_for('reports') }}">📊 View Daily Reports</a></li>
+                                    {% endif %}
+
+                                    {% if current_user.role == 'billing' %}
+                                        <li><a class="dropdown-item" href="{{ url_for('billing') }}">Payments/Billing</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endif %}
+
+                        <li class="nav-item">
+                            <span class="nav-link disabled text-light fw-bold">| Hi, {{ current_user.name }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                        </li>
+
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light ms-lg-2" href="{{ url_for('auth.register') }}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="container mt-3">
+
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show shadow-sm" role="alert">
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    {% block content %}
-    {% endblock %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main class="container py-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+
 </html>

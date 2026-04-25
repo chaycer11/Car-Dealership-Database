@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-8 col-lg-6 mx-auto">
+            
+            <div class="card shadow-sm border-success">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h4 class="mb-0">Process Vehicle Sale</h4>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <form method="POST" action="">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.vehicle_id.label(class="form-control-label fw-bold") }}
+                                {{ form.vehicle_id(class="form-control", placeholder="e.g. 1") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.customer_id.label(class="form-control-label fw-bold") }}
+                                {{ form.customer_id(class="form-control", placeholder="e.g. 1") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.temp_tag_num.label(class="form-control-label fw-bold") }}
+                            {{ form.temp_tag_num(class="form-control", placeholder="XYZ-9876") }}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.customization.label(class="form-control-label fw-bold") }}
+                            {{ form.customization(class="form-control", placeholder="e.g. Window tinting") }}
+                        </div>
+
+                        <div class="d-grid mt-2">
+                            {{ form.submit(class="btn btn-success btn-lg") }}
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

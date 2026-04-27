@@ -21,14 +21,12 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        # 1. Check if email already exists (Optional but good practice)
-        # 2. Call our database function to save the user
         success = db.create_customer(
             name=form.name.data,
             phone=form.phone.data,
             email=form.email.data,
             address=form.address.data,
-            password=form.password.data # db.py handles the hashing!
+            password=form.password.data 
         )
         
         if success:

@@ -50,7 +50,7 @@ class CustomerForm(FlaskForm):
     address = StringField('Home Address', validators=[DataRequired(), Length(max=255)])
 
     
-    # The rubric requires "purchase, service, or visit"
+    
     customer_type = SelectField('Customer Type', choices=[
         ('visit', 'Just Visiting / Browsing'),
         ('purchase', 'Looking to Purchase'),

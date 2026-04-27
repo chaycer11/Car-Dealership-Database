@@ -17,11 +17,9 @@ def get_all_inventory(make=None, model=None, year=None, max_price=None):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # Base query: Start with ALL vehicles, no status filter
     query = "SELECT * FROM Vehicle WHERE 1=1" 
     params = []
 
-    # Apply the same filters so the search bar still works
     if make:
         query += " AND make LIKE %s"
         params.append(f"%{make}%")
@@ -113,7 +111,6 @@ def process_sale(vehicle_id, customer_id, temp_tag_num, customization_work="None
         return True
     
     except Exception as e:
-        # If ANYTHING fails, undo the whole transaction so we don't corrupt the data
         print(f"Failed to process sale: {e}")
         conn.rollback() 
         return False
@@ -126,8 +123,7 @@ def process_service(vehicle_id, customer_id, mechanic_id, mileage_in, mileage_ou
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        # 1. Create the main Service Ticket
-        # (billing_id is left NULL because the customer hasn't paid yet!)
+       
         cursor.execute(
             """INSERT INTO Service (preliminary_estimate, work_done, 
                                     mileage_in, mileage_out, vehicle_id, customer_id) 
@@ -135,22 +131,19 @@ def process_service(vehicle_id, customer_id, mechanic_id, mileage_in, mileage_ou
             (estimate, work_done, mileage_in, mileage_out, vehicle_id, customer_id)
         )
         
-        # Grab the ID of the ticket we just created
         new_service_id = cursor.lastrowid
 
-        # 2. Assign the Mechanic to that ticket in the junction table
         cursor.execute(
             "INSERT INTO Service_Assignment (service_id, mechanic_id) VALUES (%s, %s)",
             (new_service_id, mechanic_id)
         )
 
-        # 3. Commit the transaction
         conn.commit()
         return True
     
     except Exception as e:
         print(f"Failed to process service: {e}")
-        conn.rollback() # Cancel everything if it fails!
+        conn.rollback() 
         return False
     finally:
         cursor.close()
@@ -271,12 +264,11 @@ def get_showroom_vehicles(make=None, model=None, year=None, max_price=None):
 
     # Base query: ALWAYS filter out sold/maintenance cars
     query = "SELECT * FROM Vehicle WHERE status = 'available'"
-    params = [] # This list holds our secure variables
+    params = [] 
 
-    # Dynamically build the query based on what the user typed
     if make:
         query += " AND make LIKE %s"
-        params.append(f"%{make}%") # % allows partial matches (e.g., 'Toy' finds 'Toyota')
+        params.append(f"%{make}%") 
     if model:
         query += " AND model LIKE %s"
         params.append(f"%{model}%")
@@ -312,7 +304,7 @@ def search_customers(search_term):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # We use LIKE so they can search partial names (e.g., 'Smit' finds 'Smith')
+    
     query = """
         SELECT * FROM Customer 
         WHERE name LIKE %s 

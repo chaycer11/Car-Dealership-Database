@@ -46,7 +46,7 @@
 
                                     {% if current_user.role == 'billing' or current_user.role == 'salesperson' %}
                                         <li><a class="dropdown-item text-info fw-bold" href="{{ url_for('customer_lookup') }}">Customer Directory</a></li>
-                                        <li><a class="dropdown-item text-success fw-bold" href="{{ url_for('reports') }}">📊 View Daily Reports</a></li>
+                                        <li><a class="dropdown-item text-success fw-bold" href="{{ url_for('reports') }}">View Daily Reports</a></li>
                                     {% endif %}
 
                                     {% if current_user.role == 'billing' %}

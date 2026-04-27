@@ -21,11 +21,11 @@ app.register_blueprint(auth_bp)
 
 @app.route('/')
 def index():
-    return redirect(url_for('auth.register'))
+    return redirect(url_for('home'))
 
 @app.route('/home')
 def home():
-    return render_template('base.html')
+    return render_template('home.html')
 
 
 @app.route('/vehicles')
@@ -47,7 +47,6 @@ def database():
             vehicles = db.get_all_inventory(make, model, year, max_price)
             return render_template('index.html', cars=vehicles)
 
-    # 2. Pass them to our new secure function
     vehicles = db.get_showroom_vehicles(make, model, year, max_price)
     
     try:
@@ -122,7 +121,7 @@ def sell_vehicle():
             customer_id=form.customer_id.data,
             temp_tag_num=form.temp_tag_num.data,
             customization_work=form.customization.data,
-            salesperson_id=1  # Hardcoding Sarah Jenkins until login is finished!
+            salesperson_id=current_user.id
         )
         if success:
             flash('Sale processed successfully! The vehicle has been removed from available inventory.', 'success')
@@ -189,7 +188,7 @@ def billing():
 @app.route('/customer_lookup')
 @login_required
 def customer_lookup():
-    # 1. Security Check: Only Employees allowed
+    # prevents non-employees from accessing the customer database
     if current_user.user_type != 'employee':
         flash("Unauthorized: Customer Database is restricted to staff.", "danger")
         return redirect(url_for('home'))

@@ -70,7 +70,7 @@ class ServiceForm(FlaskForm):
     vehicle_id = StringField('Vehicle ID', validators=[DataRequired()])
     customer_id = StringField('Customer ID', validators=[DataRequired()])
     
-    # --- CHANGED THIS LINE ---
+    
     mechanic_id = SelectField('Assigned Mechanic', coerce=int, validators=[DataRequired()])
     
     mileage_in = StringField('Mileage In', validators=[DataRequired()])

@@ -1,4 +1,3 @@
--- 1. Create the database
 CREATE DATABASE IF NOT EXISTS car_dealership;
 USE car_dealership;
 
@@ -7,7 +6,8 @@ CREATE TABLE Employee (
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     phone VARCHAR(20),
-    email varchar(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
     role ENUM('mechanic', 'salesperson', 'billing')
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE Vehicle (
     vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
     vin VARCHAR(17) UNIQUE NOT NULL,
     make VARCHAR(50),
-    MODEL VARCHAR(50),
+    model VARCHAR(50),
     year INT,
     price DECIMAL(10, 2),
     status ENUM('available', 'sold', 'maintenance') DEFAULT 'available',
@@ -27,14 +27,15 @@ CREATE TABLE Customer (
     name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
     phone VARCHAR(20),
-    email VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
     customer_type ENUM('purchase', 'service', 'visit')
 );
 
 CREATE TABLE Billing (
     billing_id INT AUTO_INCREMENT PRIMARY KEY,
     billing_date DATE,
-    payment_method ENUM('cash', 'credit_card', 'debit_card', 'check'),
+    payment_method VARCHAR(50),
     goods_or_services VARCHAR(50),
     amount DECIMAL(10, 2) NOT NULL,
     customer_id INT,
@@ -60,8 +61,8 @@ CREATE TABLE Sale (
 
 CREATE TABLE Service (
     service_id INT AUTO_INCREMENT PRIMARY KEY,
-    arrival_mileage INT,
-    departure_mileage INT,
+    mileage_in INT,
+    mileage_out INT,
     preliminary_estimate DECIMAL(10, 2),
     work_done VARCHAR(255),
     billing_id INT,

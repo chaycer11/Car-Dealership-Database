@@ -3,8 +3,10 @@
 
 # WKU Auto Group - Car Dealership Management System
 
+
 **Course:** CS351 – Database Management Systems  
-**Term Project**
+**Term Project**  
+**Deployment** https://car-dealership-database.onrender.com/home
 
 ## Project Overview
 The WKU Auto Group application is a full-stack, role-based database management system designed to simulate the operations of a real-world car dealership. It provides a secure web interface for customers to browse available inventory, and for dealership employees to manage sales, service repairs, customer data, and operational reporting.
